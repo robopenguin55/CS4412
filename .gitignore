@@ -1,0 +1,15 @@
+*.pdb
+.vs/
+Debug/
+Release/
+x64/
+*.idb
+*.obj
+*.log
+*.txt
+*.vxcproj*
+*log
+*exe
+*filters*
+*.vcxproj
+*.vcxproj.user
