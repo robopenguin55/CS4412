@@ -1,7 +1,7 @@
-// Jason Bowden
-// C++ Priority Queue Implementation
 
 #include <iostream>
+#include <fstream>
+#include <string>
 using namespace std;
 
 /*
@@ -28,15 +28,15 @@ public:
 
         queue[currentPosition] = key;
 
-        while (currentPosition > 1 && queue[currentPosition] < queue[(currentPosition>>1)])
+        while (currentPosition > 1 && queue[currentPosition] < queue[(currentPosition >> 1)])
         {
             int temp = queue[currentPosition];
 
             // swap parent and child values
-            queue[currentPosition] = queue[(currentPosition>>1)];
-            queue[(currentPosition>>1)] = temp;
+            queue[currentPosition] = queue[(currentPosition >> 1)];
+            queue[(currentPosition >> 1)] = temp;
 
-            currentPosition = (currentPosition>>1);
+            currentPosition = (currentPosition >> 1);
         }
     }
 
@@ -80,7 +80,7 @@ public:
                 currentPosition = rightChild;
             }
         }
-        
+
         return min;
     }
 
@@ -88,7 +88,7 @@ public:
     // a b-tree has 2^(n)/2 leaf nodes at a given height n
     void PrintQueue()
     {
-        unsigned int height = log2(queue[0])+1;
+        unsigned int height = log2(queue[0]) + 1;
         unsigned int leafCount = pow(2, height) / 2;
 
         cout << "Length: " << queue[0] << endl;
@@ -116,48 +116,110 @@ public:
     }
 };
 
+int eightByEight[8][8];
+int tenByTen[10][10];
+
+void initialize2DArray(int rows, int columns)
+{
+	int threshold = (rows * columns) / 3;
+	int count = 1;
+
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < columns; j++)
+		{
+			if (count <= threshold)
+				eightByEight[i][j] = 1;
+			else
+			    eightByEight[i][j] = -1;
+
+			count++;
+		}
+	}
+}
+
+void print2DArray(int rowSize, int columnSize)
+{
+	for (int i = 0; i < rowSize; i++)
+	{
+		for (int j = 0; j < columnSize; j++)
+		{
+			cout << eightByEight[i][j] << " ";
+		}
+
+		cout << endl;
+	}
+
+	cout << endl;
+}
+
+int** foo;
+
+void readFile()
+{
+    string line = "";
+    ifstream file("project6DataFile.txt");
+    int position = 0;
+    int n = 0;
+    int rows = 0;
+    int columns = 0;
+
+    if (file.is_open())
+    {
+        while (getline(file, line))
+        {
+            // get NxN value from file
+            if (position == 0)
+            {
+                n = stoi(line);
+
+                foo = new int*[n];
+
+                for (int i = 0; i < n; i++)
+                {
+                    foo[i] = new int[n];
+                }
+            }
+
+            if (!line.empty() && position > 0)
+            {
+                size_t position = 0;
+                string token;
+                while ((position = line.find(" ")) != std::string::npos)
+                {
+                    foo[rows][columns] = stoi(line.substr(0, position));
+                    line.erase(0, position + 1);
+                    columns++;
+                }
+                rows++;
+            }
+            
+            position++;
+        }
+
+        file.close();
+    }
+    else cout << "Unable to open file";
+}
+
 int main()
 {
-    PriorityQueue* queue = new PriorityQueue();
+    initialize2DArray(8, 8);
+    print2DArray(8, 8);
 
-    queue->Insert(4);
-    queue->Insert(4);
-    queue->Insert(8);
-    queue->Insert(9);
-    queue->Insert(5);
-    queue->Insert(12);
-    queue->Insert(9);
-    queue->Insert(11);
-    queue->Insert(13);
-    queue->Insert(7);
-    queue->Insert(10);
-    queue->Insert(5);
-    queue->Insert(1);
-    queue->Insert(4);
-    queue->Insert(4);
-    queue->Insert(8);
-    queue->Insert(9);
-    queue->Insert(5);
-    queue->Insert(12);
-    queue->Insert(9);
-    queue->Insert(11);
-    queue->Insert(13);
-    queue->Insert(7);
-    queue->Insert(10);
-    queue->Insert(5);
-    queue->Insert(1);
+    readFile();
 
-    queue->PrintQueue();
+    for (int i = 0; i < 10; i++)
+    {
+        for (int j = 0; j < 10; j++)
+        {
+            cout << foo[i][j];
+        }
 
-    int min = queue->ExtractMin();
+        cout << endl;
+    }
 
-    cout << "Min value = " << min << endl;
-
-    queue->PrintQueue();
-
-    int i; 
+    int i;
 
     cin >> i;
 }
-
-
