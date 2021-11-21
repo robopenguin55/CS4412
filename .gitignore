@@ -7,10 +7,5 @@ x64/
 *.obj
 *.log
 *.txt
-*.vxcproj*
 *log
 *exe
-*filters*
-*.vcxproj
-*.vcxproj.user
-*vcxitems*
