@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-/*g
+/*
 Jason Bowden
 Shortest Path Assignment
 */

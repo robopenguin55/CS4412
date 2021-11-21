@@ -28,15 +28,15 @@ public:
 
         queue[currentPosition] = key;
 
-        while (currentPosition > 1 && queue[currentPosition] < queue[(currentPosition>>1)])
+        while (currentPosition > 1 && queue[currentPosition] < queue[(currentPosition/2)])
         {
             int temp = queue[currentPosition];
 
             // swap parent and child values
-            queue[currentPosition] = queue[(currentPosition>>1)];
-            queue[(currentPosition>>1)] = temp;
+            queue[currentPosition] = queue[(currentPosition / 2)];
+            queue[(currentPosition / 2)] = temp;
 
-            currentPosition = (currentPosition>>1);
+            currentPosition = (currentPosition / 2);
         }
     }
 

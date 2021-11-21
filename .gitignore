@@ -13,3 +13,4 @@ x64/
 *filters*
 *.vcxproj
 *.vcxproj.user
+*vcxitems*
