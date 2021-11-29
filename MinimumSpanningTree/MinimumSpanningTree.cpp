@@ -3,6 +3,8 @@
 
 #include "framework.h"
 #include "MinimumSpanningTree.h"
+#include <iostream>
+#include <fstream>
 #include <string>
 using namespace std;
 #define MAX_LOADSTRING 100
@@ -18,6 +20,73 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
+
+/* Holds the contents of the file we read in for part 2 */
+int** fileContents;
+
+/* Create matrix from file contents */
+void readFileIntoArray()
+{
+    string line = "";
+    ifstream file("P8-MTSTree-v1.txt");
+    int position = 0;
+    int n = 0;
+    int rows = 0;
+
+    if (file.is_open())
+    {
+        while (getline(file, line))
+        {
+            // get NxN value from file
+            if (position == 0)
+            {
+                n = stoi(line);
+
+                fileContents = new int* [n];
+
+                for (int i = 0; i < n; i++)
+                {
+                    fileContents[i] = new int[n];
+                }
+            }
+
+            if (!line.empty() && position > 0)
+            {
+                size_t position = 0;
+                int columns = 0;
+                string token;
+
+                // swap out double spaces for single spaces before reading in to our array
+                while ((position = line.find("  ")) != std::string::npos)
+                {
+                    line.replace(position, 2, " ");
+                }
+
+                while ((position = line.find(" ")) != std::string::npos)
+                {
+                    string substring = line.substr(0, position);
+                    if (!substring.empty())
+                    {
+                        fileContents[rows][columns] = stoi(substring);
+                        columns++;
+                    }
+                    line.erase(0, position + 1);
+                }
+
+                if (!line.empty())
+                    fileContents[rows][columns] = stoi(line);
+
+                rows++;
+            }
+
+            position++;
+        }
+
+        file.close();
+    }
+    else cout << "Unable to open file";
+}
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -27,6 +96,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: Place code here.
+    readFileIntoArray();
 
     // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -147,7 +217,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            TextOut(hdc, 0, 0, "Hello, Windows!", 15);
+            //TextOut(hdc, 0, 0, "Hello, Windows!", 15);
+            int top = -500;
+            int left = 500;
+            int right = 1000;
+            int bottom = -1000;
+
+            Ellipse(hdc, left, top, right, bottom);
             // TODO: Add any drawing code that uses hdc here...
             EndPaint(hWnd, &ps);
         }
